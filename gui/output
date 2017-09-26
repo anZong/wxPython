@@ -1,0 +1,63 @@
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
+App OnInit
+Frame __init__
+Traceback (most recent call last):
+  File "C:/Users/Zong/test/gui/index.py", line 16, in OnInit
+    self.frame = Frame()  # 创建框架
+  File "C:/Users/Zong/test/gui/index.py", line 32, in __init__
+    panel = wx.Pannel(self)  # 添加画板
+AttributeError: 'module' object has no attribute 'Pannel'
+OnInit returned false, exiting...
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
+App OnInit
+Frame __init__
+Traceback (most recent call last):
+  File "C:/Users/Zong/test/gui/index.py", line 16, in OnInit
+    self.frame = Frame()  # 创建框架
+  File "C:/Users/Zong/test/gui/index.py", line 38, in __init__
+    self.setMenuBar(menuBar)
+AttributeError: 'Frame' object has no attribute 'setMenuBar'
+OnInit returned false, exiting...
+App OnInit
+Frame __init__
+Traceback (most recent call last):
+  File "C:/Users/Zong/test/gui/index.py", line 16, in OnInit
+    self.frame = Frame()  # 创建框架
+  File "C:/Users/Zong/test/gui/index.py", line 38, in __init__
+    self.setMenuBar(menuBar)
+AttributeError: 'Frame' object has no attribute 'setMenuBar'
+OnInit returned false, exiting...
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
+App OnInit
+Frame __init__
+An Error Msg!
+Before MainLoop
+App OnExit
+TypeError: invalid result from App.OnExit(), an integer is required
