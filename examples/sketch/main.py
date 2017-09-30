@@ -7,6 +7,7 @@ import wx,os
 
 
 class SketchWindow(wx.Window):
+    '''画板窗口'''
     def __init__(self,parent,id):
         wx.Window.__init__(self,parent,id)
         self.SetBackgroundColour('White')
@@ -106,12 +107,13 @@ class SketchFrame(wx.Frame):
         wx.Frame.__init__(self,parent,-1,'画板',size=(800,600))
         self.sketch = SketchWindow(self,-1)
         self.sketch.Bind(wx.EVT_MOTION,self.OnSketchMotion)
-
-        self.wildcard = "Sketch files(*.sketch)|*.sketch|All files (*.*)|*.*"
-
         self.initStatusBar()
         self.createMenuBar()
         self.createToolBar()
+
+        self.title = self.Label
+        self.filename = ""
+        self.wildcard = "Sketch files(*.sketch)|*.sketch|All files (*.*)|*.*"
 
     def initStatusBar(self):
         self.statusbar = self.CreateStatusBar()
@@ -155,7 +157,8 @@ class SketchFrame(wx.Frame):
                     ("Black","",self.OnColor,wx.ITEM_RADIO),
                     ("Red","",self.OnColor,wx.ITEM_RADIO),
                     ("Green","",self.OnColor,wx.ITEM_RADIO),
-                    ("Blue","",self.OnColor,wx.ITEM_RADIO)
+                    ("Blue","",self.OnColor,wx.ITEM_RADIO),
+                    ("其他","",self.OnOtherColor,wx.ITEM_RADIO),
                 )),
                 ("","",""),
                 ("退出","Quit",self.OnCloseWindow)
@@ -173,8 +176,10 @@ class SketchFrame(wx.Frame):
         self.statusbar.SetStatusText("Line Count:%s" % len(self.sketch.lines),2)
         event.Skip()
 
-    def OnNew(self):
-        pass
+    def OnNew(self,event):
+        self.filename = ""
+        self.sketch.SetLinesData([])
+        self.SetTitle(self.title)
 
     def OnOpen(self,event):
         dlg = wx.FileDialog(self,"打开文件...",os.getcwd(),style=wx.FD_DEFAULT_STYLE,wildcard=self.wildcard)
@@ -184,8 +189,11 @@ class SketchFrame(wx.Frame):
             self.SetTitle(self.title + "--" + self.filename)
         dlg.Destroy()
 
-    def OnSave(self):
-        pass
+    def OnSave(self,event):
+        if not self.filename:
+            self.OnSaveAs(event)
+        else:
+            self.SaveFile()
 
     def OnColor(self,event):
         menubar = self.GetMenuBar()
@@ -194,8 +202,42 @@ class SketchFrame(wx.Frame):
         color = item.GetLabel()
         self.sketch.SetColor(color)
 
+    def OnOtherColor(self,event):
+        pass
+
     def OnCloseWindow(self,event):
         self.Destroy()
+
+    def SaveFile(self):
+        import cPickle
+        if self.filename:
+            data = self.sketch.GetLinesData()
+            f = open(self.filename,'w')
+            cPickle.dump(data,f)
+            f.close()
+
+    def OnSaveAs(self,event):
+        dlg = wx.FileDialog(self,"另存为",os.getcwd(),style=wx.FD_SAVE,wildcard=self.wildcard)
+        if dlg.ShowModal() == wx.ID_OK:
+            filename = dlg.GetPath()
+            if not os.path.splitext(filename)[1]:
+                filename = filename + '.sketch'
+            self.filename = filename
+            self.SaveFile()
+            self.SetTitle(self.title + '--' + self.filename)
+        dlg.Destroy()
+
+    def ReadFile(self):
+        import cPickle
+        if self.filename:
+            try:
+                f = open(self.filename,'r')
+                data = cPickle.load(f)
+                f.close()
+                self.sketch.SetLinesData(data)
+            except cPickle.UnpicklingError:
+                wx.MessageBox("该文件不是sketch文件","oops!",style=wx.OK|wx.ICON_EXCLAMATION)
+
 
 
 if __name__ == '__main__':
